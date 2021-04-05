@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.user.dao.RoleDao">
+	<select id="findListByQuery" parameterType="com.guo.pojo.entity.user.Role" resultMap="resultMap">
+		select
+			sr.id,
+			sr.name,
+		    sr.code,
+			sm.id menuId,
+			sm.name menuName,
+			sr.status,
+			sr.createUser,
+			sr.createTime,
+			sr.updateUser,
+			sr.updateTime
+		from sys_role sr left join sys_role_menu srm on sr.id = srm.role
+		                 left join sys_menu sm on sm.id = srm.menu
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null"> sr.id = #{id} and </if>
+				<if test="name != null"> sr.name like concat('%',#{name},'%') and </if>
+				<if test="status != null"> sr.status = #{status} and</if>
+				<if test="code != null"> sr.code = #{code} and</if>
+			</trim>
+		</where>
+		order by sr.createTime asc
+	</select>
+
+	<insert id="save" parameterType="com.guo.pojo.entity.user.Role">
+		insert into sys_role(
+		<trim suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="code != null">code,</if>
+			<if test="status != null">status,</if>
+			<if test="createUser != null">createUser,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="updateUser != null">updateUser,</if>
+			<if test="updateTime != null">updateTime,</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="code != null">#{code},</if>
+			<if test="status != null">#{status},</if>
+			<if test="createUser != null">#{createUser},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateUser != null">#{updateUser},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="com.guo.pojo.entity.user.Role">
+		update sys_role
+		<set>
+			<trim suffixOverrides=",">
+				<if test="name != null">name = #{name},</if>
+				<if test="code != null">code = #{code},</if>
+				<if test="status != null">status = #{status},</if>
+				<if test="role != null and role.id != null">role = #{role.id},</if>
+				<if test="createUser != null">createUser = #{createUser},</if>
+				<if test="createTime != null">createTime = #{createTime},</if>
+				<if test="updateUser != null">updateUser = #{updateUser},</if>
+				<if test="updateTime != null">updateTime = #{updateTime},</if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id = #{id} and</if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="com.guo.pojo.entity.user.Role">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="name" javaType="java.lang.String" column="name"/>
+		<result property="code" javaType="java.lang.String" column="code"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createUser" javaType="java.lang.String" column="createUser"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateUser" javaType="java.lang.String" column="updateUser"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<collection property="menuList" ofType="com.guo.pojo.entity.user.Menu">
+			<id property="id" javaType="java.lang.String" column="menuId"/>
+			<result property="name" javaType="java.lang.String" column="menuName"/>
+		</collection>
+	</resultMap>
+</mapper>

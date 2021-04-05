@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.department.dao.DepartmentDao">
+	<select id="findListByQuery" parameterType="com.guo.pojo.entity.department.Department" resultMap="resultMap">
+		select
+			sd.id,
+			sd.text,
+			sd.code,
+			sc.id courtyardId,
+			sc.text courtyardText,
+			sc.code courtyardCode,
+			scg.id classgradeId,
+			scg.text classgradeText,
+			scg.code classgradeCode,
+			sd.status,
+			sd.createTime,
+			sd.createUser,
+			sd.updateTime,
+			sd.updateUser
+		from
+		    sys_department sd left join sys_courtyard sc on sd.courtyard = sc.id
+		    left join sys_classgrade scg on sd.id = scg.department
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sd.id = #{id} and</if>
+				<if test="code != null">sd.code = #{code} and</if>
+				<if test="text != null">sd.text like concat('%',#{text},'%') and</if>
+				<if test="status != null">sd.status = #{status} and</if>
+			</trim>
+		</where>
+		order by sd.createTime asc
+	</select>
+
+	<insert id="save" parameterType="com.guo.pojo.entity.department.Department">
+		insert into sys_department(
+		<trim suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="text != null">text,</if>
+			<if test="status != null">status,</if>
+			<if test="code != null">code,</if>
+			<if test="courtyard != null and courtyard.id != null">courtyard,</if>
+			<if test="createUser != null">createUser,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="updateUser != null">updateUser,</if>
+			<if test="updateTime != null">updateTime,</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="text != null">#{text},</if>
+			<if test="status != null">#{status},</if>
+			<if test="code != null">#{code},</if>
+			<if test="courtyard != null and courtyard.id != null">#{courtyard.id},</if>
+			<if test="createUser != null">#{createUser},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateUser != null">#{updateUser},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="com.guo.pojo.entity.department.Department">
+		update sys_department
+		<set>
+			<trim suffixOverrides=",">
+				<if test="text != null">text = #{text},</if>
+				<if test="code != null">code = #{code},</if>
+				<if test="status != null">status = #{status},</if>
+				<if test="courtyard != null and courtyard.id != null">courtyard = #{courtyard.id},</if>
+				<if test="createUser != null">createUser = #{createUser},</if>
+				<if test="createTime != null">createTime = #{createTime},</if>
+				<if test="updateUser != null">updateUser = #{updateUser},</if>
+				<if test="updateTime != null">updateTime = #{updateTime},</if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id = #{id} and</if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="com.guo.pojo.entity.department.Department">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="text" javaType="java.lang.String" column="text"/>
+		<result property="code" javaType="java.lang.String" column="code"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createUser" javaType="java.lang.String" column="createUser"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateUser" javaType="java.lang.String" column="updateUser"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="courtyard" javaType="com.guo.pojo.entity.department.Courtyard">
+			<id property="id" javaType="java.lang.String" column="courtyardId"/>
+			<result property="text" javaType="java.lang.String" column="courtyardText"/>
+			<result property="code" javaType="java.lang.String" column="courtyardCode"/>
+		</association>
+		<collection property="classGradesLists" ofType="com.guo.pojo.entity.department.ClassGrade">
+			<id property="id" javaType="java.lang.String" column="classgradeId"/>
+			<result property="text" javaType="java.lang.String" column="classgradeText"/>
+			<result property="code" javaType="java.lang.String" column="classgradeCode"/>
+		</collection>
+	</resultMap>
+</mapper>

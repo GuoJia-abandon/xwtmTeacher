@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.workload.dao.WorkLoadDao">
+	<select id="findListByQuery" parameterType="com.guo.pojo.entity.workload.WorkLoad" resultMap="resultMap">
+		  select
+				sw.id,
+				sw.classNum,
+				sw.remark,
+				sw.year,
+				sw.period,
+				swt.id typeId,
+				swt.text typeText,
+		        swt.code typeCode,
+				sc.id classId,
+				sc.text classText,
+		        sc.code classCode,
+				sc.classNum classGradeNum,
+				sco.id courseId,
+				sco.text courseText,
+				sd.id departmentId,
+				sd.text departmentText,
+				sy.id courtyardId,
+				sy.text courtyardText,
+				swm.id methodsId,
+				swm.text methodsText,
+				su.id userId,
+				su.cellphone userCellphone,
+				su.name userName,
+				sw.status,
+				sw.createTime,
+				sw.createUser,
+				sw.updateTime,
+				sw.updateUser
+		   from
+			    sys_workload sw left join sys_workload_type swt on sw.workloadType = swt.id
+				left join sys_classgrade sc on sw.classGrade = sc.id
+				left join sys_course sco on sw.course = sco.id
+				left join sys_department sd on sw.department = sd.id
+				left join sys_courtyard sy on sw.courtyard = sy.id
+				left join sys_workload_methods swm on sw.workLoadMethods = swm.id
+				left join sys_user su on sw.user = su.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sw.id = #{id} and</if>
+				<if test="period != null">sw.period = #{period} and</if>
+				<if test="year != null">sw.year = #{year} and</if>
+				<if test="remark != null">sw.remark like concat('%',#{remark},'%') and</if>
+				<if test="workLoadType != null and workLoadType.id != null">sw.workLoadType = #{workLoadType.id} and</if>
+				<if test="workLoadType != null and workLoadType.text != null">swt.text like concat('%',#{workLoadType.text},'%') and</if>
+				<if test="classGrade != null and classGrade.id != null">sw.classGrade = #{classGrade.id} and</if>
+				<if test="classGrade != null and classGrade.text != null">sc.text like concat('%',#{classGrade.text},'%') and</if>
+				<if test="course != null and course.id != null">sw.course = #{course.id} and</if>
+				<if test="course != null and course.text != null">sco.text like concat('%',#{course.text},'%') and</if>
+				<if test="department != null and department.id != null">sw.department = #{department.id} and</if>
+				<if test="department != null and department.text != null">sd.text like concat('%',#{department.text},'%') and</if>
+				<if test="courtyard != null and courtyard.id != null">sw.courtyard = #{courtyard.id} and</if>
+				<if test="courtyard != null and courtyard.text != null">sy.text like concat('%',#{courtyard.text},'%') and</if>
+				<if test="workLoadMethods != null and workLoadMethods.id != null">sw.workLoadMethods = #{workLoadMethods.id} and</if>
+				<if test="workLoadMethods != null and workLoadMethods.text != null">swm.text like concat('%',#{workLoadMethods.text},'%') and</if>
+				<if test="user != null and user.id != null">sw.user = #{user.id} and</if>
+				<if test="user != null and user.text != null">su.name like concat('%',#{user.name},'%') and</if>
+				<if test="status != null">sw.status = #{status} and</if>
+			</trim>
+		</where>
+		order by sw.createTime asc
+	</select>
+
+	<insert id="save" parameterType="com.guo.pojo.entity.workload.WorkLoad">
+		insert into sys_workload(
+		<trim suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="classNum != null">classNum,</if>
+			<if test="remark != null">remark,</if>
+			<if test="year != null">year,</if>
+			<if test="period != null">period,</if>
+			<if test="workLoadType != null and workLoadType.id != null">workLoadType,</if>
+			<if test="classGrade != null and classGrade.id != null">classGrade,</if>
+			<if test="course != null and course.id != null">course,</if>
+			<if test="department != null and department.id != null">department,</if>
+			<if test="courtyard != null and courtyard.id != null">courtyard,</if>
+			<if test="workLoadMethods != null and workLoadMethods.id != null">workLoadMethods,</if>
+			<if test="user != null and user.id != null">user,</if>
+			<if test="status != null">status,</if>
+			<if test="createUser != null">createUser,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="updateUser != null">updateUser,</if>
+			<if test="updateTime != null">updateTime,</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="classNum != null">#{classNum},</if>
+			<if test="remark != null">#{remark},</if>
+			<if test="year != null">#{year},</if>
+			<if test="period != null">#{period},</if>
+			<if test="workLoadType != null and workLoadType.id != null">#{workLoadType.id},</if>
+			<if test="classGrade != null and classGrade.id != null">#{classGrade.id},</if>
+			<if test="course != null and course.id != null">#{course.id},</if>
+			<if test="department != null and department.id != null">#{department.id},</if>
+			<if test="courtyard != null and courtyard.id != null">#{courtyard.id},</if>
+			<if test="workLoadMethods != null and workLoadMethods.id != null">#{workLoadMethods.id},</if>
+			<if test="user != null and user.id != null">#{user.id},</if>
+			<if test="createUser != null">#{createUser},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateUser != null">#{updateUser},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="com.guo.pojo.entity.workload.WorkLoad">
+		update sys_workload
+		<set>
+			<trim suffixOverrides=",">
+				<if test="classNum != null">classNum = #{classNum},</if>
+				<if test="remark != null">remark = #{remark},</if>
+				<if test="year != null">year = #{year},</if>
+				<if test="period != null">period = #{period},</if>
+				<if test="workLoadType != null and workLoadType.id != null">workLoadType = #{workLoadType.id},</if>
+				<if test="classGrade != null and classGrade.id != null">classGrade = #{classGrade.id},</if>
+				<if test="course != null and course.id != null">course = #{course.id},</if>
+				<if test="department != null and department.id != null">department = #{department.id},</if>
+				<if test="courtyard != null and courtyard.id != null">courtyard = #{courtyard.id},</if>
+				<if test="workLoadMethods != null and workLoadMethods.id != null">workLoadMethods = #{workLoadMethods.id},</if>
+				<if test="user != null and user.id != null">user = #{user.id},</if>
+				<if test="status != null">status = #{status},</if>
+				<if test="createUser != null">createUser = #{createUser},</if>
+				<if test="createTime != null">createTime = #{createTime},</if>
+				<if test="updateUser != null">updateUser = #{updateUser},</if>
+				<if test="updateTime != null">updateTime = #{updateTime},</if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id = #{id} and</if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="com.guo.pojo.entity.workload.WorkLoad">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="remark" javaType="java.lang.String" column="remark"/>
+		<result property="year" javaType="java.lang.String" column="year"/>
+		<result property="period" javaType="java.lang.Integer" column="period"/>
+		<result property="classNum" javaType="java.lang.Integer" column="classNum"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createUser" javaType="java.lang.String" column="createUser"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateUser" javaType="java.lang.String" column="updateUser"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="workLoadType" javaType="com.guo.pojo.entity.workload.WorkLoadType">
+			<id property="id" javaType="java.lang.String" column="typeId"/>
+			<result property="text" javaType="java.lang.String" column="typeText"/>
+			<result property="code" javaType="java.lang.String" column="typeCode"/>
+		</association>
+		<association property="classGrade" javaType="com.guo.pojo.entity.department.ClassGrade">
+			<id property="id" javaType="java.lang.String" column="classId"/>
+			<result property="text" javaType="java.lang.String" column="classText"/>
+			<result property="code" javaType="java.lang.String" column="classCode"/>
+			<result property="classNum" javaType="java.lang.Integer" column="classGradeNum"/>
+			<association property="department" javaType="com.guo.pojo.entity.department.Department">
+				<id property="id" javaType="java.lang.String" column="id"/>
+			</association>
+		</association>
+		<association property="course" javaType="com.guo.pojo.entity.department.Course">
+			<id property="id" javaType="java.lang.String" column="courseId"/>
+			<result property="text" javaType="java.lang.String" column="courseText"/>
+		</association>
+		<association property="department" javaType="com.guo.pojo.entity.department.Department">
+			<id property="id" javaType="java.lang.String" column="departmentId"/>
+			<result property="text" javaType="java.lang.String" column="departmentText"/>
+			<association property="courtyard" javaType="com.guo.pojo.entity.department.Courtyard">
+				<id property="id" javaType="java.lang.String" column="id"/>
+			</association>
+		</association>
+		<association property="courtyard" javaType="com.guo.pojo.entity.department.Courtyard">
+			<id property="id" javaType="java.lang.String" column="courtyardId"/>
+			<result property="text" javaType="java.lang.String" column="courtyardText"/>
+		</association>
+		<association property="workLoadMethods" javaType="com.guo.pojo.entity.workload.WorkLoadMethods">
+			<id property="id" javaType="java.lang.String" column="methodsId"/>
+			<result property="text" javaType="java.lang.String" column="methodsText"/>
+		</association>
+		<association property="user" javaType="com.guo.pojo.entity.user.User">
+			<id property="id" javaType="java.lang.String" column="userId"/>
+			<result property="cellphone" javaType="java.lang.String" column="userCellphone"/>
+			<result property="name" javaType="java.lang.String" column="userName"/>
+		</association>
+	</resultMap>
+</mapper>

@@ -1,0 +1,13 @@
+server:
+  port: 12345
+spring:
+  application:
+    name: xwtm_register_center
+eureka:
+ instance:
+   hostname: localhost
+ client:
+   register-with-eureka: false
+   fetch-registry: false
+   service-url:
+     defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.user.dao.UserDao">
+	<select id="findListByQuery" parameterType="com.guo.pojo.entity.user.User" resultMap="resultMap">
+		select
+			su.id,
+			su.name,
+			su.email,
+			su.cellphone,
+			su.password,
+			su.avatar,
+		    su.sex,
+			vr.id roleId,
+			vr.name roleName,
+			vr.code roleCode,
+		    sd.id departmentId,
+		    sd.text departmentText,
+		    sd.code departmentCode,
+			sc.id courseId,
+			sc.text courseText,
+			su.status,
+			su.idCard,
+		    su.education,
+		    su.address,
+			su.createUser,
+			su.createTime,
+			su.updateUser,
+			su.updateTime
+		from
+			sys_user su left join sys_role vr on su.role = vr.id
+			            left join sys_course sc on su.id = sc.user
+			            left join sys_department sd on sd.id = su.department
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">su.id = #{id} and</if>
+				<if test="name != null">su.name like concat('%',#{name},'%') and</if>
+				<if test="address != null">su.address like concat('%',#{address},'%') and</if>
+				<if test="email != null">su.email = #{email} and</if>
+				<if test="education != null">su.education = #{education} and</if>
+				<if test="idCard != null">su.idCard = #{idCard} and</if>
+				<if test="sex != null">su.sex = #{sex} and</if>
+				<if test="cellphone != null">su.cellphone = #{cellphone} and</if>
+				<if test="status != null">su.status = #{status} and</if>
+			</trim>
+		</where>
+		order by su.createTime asc
+	</select>
+
+	<insert id="save" parameterType="com.guo.pojo.entity.user.User">
+		insert into sys_user(
+		<trim suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="name != null">name,</if>
+			<if test="cellphone != null">cellphone,</if>
+			<if test="password != null">password,</if>
+			<if test="email != null">email,</if>
+			<if test="idCard != null">idCard,</if>
+			<if test="avatar != null">avatar,</if>
+			<if test="status != null">status,</if>
+			<if test="education != null">education,</if>
+			<if test="address != null">address,</if>
+			<if test="sex != null">sex,</if>
+			<if test="role != null and role.id != null">role,</if>
+			<if test="department != null and department.id != null">department,</if>
+			<if test="createUser != null">createUser,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="updateUser != null">updateUser,</if>
+			<if test="updateTime != null">updateTime,</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="cellphone != null">#{cellphone},</if>
+			<if test="password != null">#{password},</if>
+			<if test="email != null">#{email},</if>
+			<if test="idCard != null">#{idCard},</if>
+			<if test="avatar != null">#{avatar},</if>
+			<if test="status != null">#{status},</if>
+			<if test="education != null">#{education},</if>
+			<if test="address != null">#{address},</if>
+			<if test="sex != null">#{sex},</if>
+			<if test="role != null and role.id != null">#{role.id},</if>
+			<if test="department != null and department.id != null">#{department.id},</if>
+			<if test="createUser != null">#{createUser},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateUser != null">#{updateUser},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="com.guo.pojo.entity.user.User">
+		update sys_user
+		<set>
+			<trim suffixOverrides=",">
+				<if test="name != null">name = #{name},</if>
+				<if test="cellphone != null">cellphone = #{cellphone},</if>
+				<if test="password != null">password = #{password},</if>
+				<if test="email != null">email = #{email},</if>
+				<if test="idCard != null">idCard = #{idCard},</if>
+				<if test="avatar != null">avatar = #{avatar},</if>
+				<if test="status != null">status = #{status},</if>
+				<if test="education != null">education = #{education},</if>
+				<if test="address != null">address = #{address},</if>
+				<if test="sex != null">sex = #{sex},</if>
+				<if test="role != null and role.id != null">role = #{role.id},</if>
+				<if test="department != null and department.id != null">department = #{department.id},</if>
+				<if test="createUser != null">createUser = #{createUser},</if>
+				<if test="createTime != null">createTime = #{createTime},</if>
+				<if test="updateUser != null">updateUser = #{updateUser},</if>
+				<if test="updateTime != null">updateTime = #{updateTime},</if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id = #{id} and</if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="com.guo.pojo.entity.user.User">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="name" javaType="java.lang.String" column="name"/>
+		<result property="email" javaType="java.lang.String" column="email"/>
+		<result property="idCard" javaType="java.lang.String" column="idCard"/>
+		<result property="sex" javaType="java.lang.Integer" column="sex"/>
+		<result property="address" javaType="java.lang.String" column="address"/>
+		<result property="education" javaType="java.lang.String" column="education"/>
+		<result property="cellphone" javaType="java.lang.String" column="cellphone"/>
+		<result property="password" javaType="java.lang.String" column="password"/>
+		<result property="avatar" javaType="java.lang.String" column="avatar"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createUser" javaType="java.lang.String" column="createUser"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateUser" javaType="java.lang.String" column="updateUser"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="role" javaType="com.guo.pojo.entity.user.Role">
+			<id property="id" javaType="java.lang.String" column="roleId"/>
+			<result property="name" javaType="java.lang.String" column="roleName"/>
+			<result property="code" javaType="java.lang.String" column="roleCode"/>
+		</association>
+		<association property="department" javaType="com.guo.pojo.entity.department.Department">
+			<id property="id" javaType="java.lang.String" column="departmentId"/>
+			<result property="text" javaType="java.lang.String" column="departmentText"/>
+			<result property="code" javaType="java.lang.String" column="departmentCode"/>
+		</association>
+		<collection property="courseList" ofType="com.guo.pojo.entity.department.Course">
+			<id property="id" javaType="java.lang.String" column="courseId"/>
+			<result property="text" javaType="java.lang.String" column="courseText"/>
+		</collection>
+	</resultMap>
+</mapper>

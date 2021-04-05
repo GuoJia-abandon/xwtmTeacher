@@ -1,0 +1,9 @@
+server:
+  port: 44488
+spring:
+  application:
+    name: xwtm-workload-consumer
+  profiles:
+    active: client
+  main:
+    allow-bean-definition-overriding: true

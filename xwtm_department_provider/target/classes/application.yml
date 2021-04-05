@@ -1,0 +1,7 @@
+server:
+  port: 33399
+spring:
+  application:
+    name: xwtm-department-provider
+  profiles:
+    active: client, data

@@ -1,0 +1,7 @@
+server:
+  port: 44499
+spring:
+  application:
+    name: xwtm-workload-provider
+  profiles:
+    active: client, data

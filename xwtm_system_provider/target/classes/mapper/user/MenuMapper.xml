@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.user.dao.MenuDao">
+	<select id="findListByQuery" parameterType="com.guo.pojo.entity.user.Menu" resultMap="resultMap">
+		select
+			sm.id,
+			sm.component,
+			sm.path,
+		    sm.name,
+			sm.icon,
+			sm.status,
+			sm.createUser,
+			sm.createTime,
+			sm.updateUser,
+			sm.updateTime
+		from
+		sys_menu sm
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sm.id = #{id} and</if>
+				<if test="component != null">sm.component like concat('%',#{component},'%') and</if>
+				<if test="name != null">sm.name like concat('%',#{name},'%') and</if>
+				<if test="path != null">sm.path = #{url} and</if>
+				<if test="icon != null">sm.icon = #{icon} and</if>
+				<if test="status != null">sm.status = #{status} and</if>
+			</trim>
+		</where>
+		order by sm.createTime asc
+	</select>
+
+
+	<select id="findMenuListByRoleAndParent" resultType="com.guo.pojo.entity.user.Menu">
+		select DISTINCT
+			sm.id,
+			sm.component,
+			sm.name,
+			smp.id parentId,
+			smp.component parentComponent,
+			smp.path parentPath,
+			smp.name parentName,
+			smp.icon parentIcon,
+			sm.path,
+			sm.icon,
+			sm.status,
+			sm.createUser,
+			sm.updateUser,
+			sm.createTime,
+			sm.updateTime
+		from
+		sys_menu sm left join sys_menu smp on smp.id = sm.parent
+		            left join sys_role_menu srm on sm.id = srm.menu
+		<where>
+			<trim suffixOverrides="and">
+				<if test="role != null ">srm.role = #{role} and</if>
+				<choose>
+					<when test="parent != null">sm.parent = #{parent}</when>
+					<otherwise>sm.parent is null and</otherwise>
+				</choose>
+			</trim>
+		</where>
+		order by sm.createTime asc
+	</select>
+
+	<insert id="save" parameterType="com.guo.pojo.entity.user.Menu">
+		insert into sys_menu(
+		<trim suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="component != null">component,</if>
+			<if test="path != null">path,</if>
+			<if test="name != null">name,</if>
+			<if test="icon != null">icon,</if>
+			<if test="status != null">status,</if>
+			<if test="createUser != null">createUser,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="updateUSer != null">updateUSer,</if>
+			<if test="updateTime != null">updateTime,</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="component != null">#{component},</if>
+			<if test="path != null">#{path},</if>
+			<if test="icon != null">#{icon},</if>
+			<if test="status != null">#{status},</if>
+			<if test="createUser != null">#{createUser},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateUSer != null">#{updateUSer},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="com.guo.pojo.entity.user.Menu">
+		update sys_menu
+			<set>
+				<trim suffixOverrides=",">
+					<if test="component != null">component = #{component},</if>
+					<if test="path != null">path = #{path},</if>
+					<if test="name != null">name = #{name},</if>
+					<if test="icon != null">icon = #{icon},</if>
+					<if test="status != null">status = #{status},</if>
+					<if test="createUser != null">createUser = #{createUser},</if>
+					<if test="createTime != null">createTime = #{createTime},</if>
+					<if test="updateUser != null">updateUser = #{updateUSer},</if>
+					<if test="updateTime != null">updateTime = #{updateTime},</if>
+				</trim>
+			</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id = #{id} and</if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="com.guo.pojo.entity.user.Menu">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="component" javaType="java.lang.String" column="component"/>
+		<result property="path" javaType="java.lang.String" column="path"/>
+		<result property="name" javaType="java.lang.String" column="name"/>
+		<result property="icon" javaType="java.lang.String" column="icon"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createUser" javaType="java.lang.String" column="createUser"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateUser" javaType="java.lang.String" column="updateUser"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+	</resultMap>
+</mapper>

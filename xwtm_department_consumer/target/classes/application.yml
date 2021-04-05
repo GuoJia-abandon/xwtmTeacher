@@ -1,0 +1,9 @@
+server:
+  port: 33388
+spring:
+  application:
+    name: xwtm-department-consumer
+  profiles:
+    active: client
+  main:
+    allow-bean-definition-overriding: true
